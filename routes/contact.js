@@ -15,7 +15,9 @@ router.post('/', async (req, res) => {
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-      }
+      },
+      connectionTimeout: 10000,
+      socketTimeout: 10000
     });
 
     // Email to Bhupendra
@@ -52,8 +54,8 @@ router.post('/', async (req, res) => {
 
     res.json({ success: true, message: 'Message sent successfully!' });
   } catch (err) {
-    console.error('Email error:', err);
-    res.status(500).json({ error: 'Failed to send message. Please try again.' });
+    console.error('Email error:', err.message);
+    res.status(500).json({ error: 'Failed to send message. Please email btale05.bt@gmail.com directly.' });
   }
 });
 
