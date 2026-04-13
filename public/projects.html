@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Bhupendra Tale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan: #00ffff;
+      --magenta: #ff00ff;
+      --green: #00ff41;
+      --purple: #7b2fff;
+      --orange: #ff6b00;
+      --dark: #111116;
+      --dark2: #16162a;
+      --dark3: #1c1c35;
+      --text: #c8c8e8;
+      --text-dim: #6868a8;
+      --border: rgba(0,255,255,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(17,17,22,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--cyan); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 120px 5% 60px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .page-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .page-desc {
+      color: var(--text-dim);
+      font-size: 1rem;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 24px 5%;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,255,255,0.02);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-n {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--cyan), var(--magenta));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-l {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* FILTERS */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 40px 5% 0;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 8px 22px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(0,255,255,0.08);
+    }
+
+    /* PROJECTS GRID */
+    .projects-section {
+      padding: 40px 5% 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .project-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: all 0.4s;
+      overflow: hidden;
+      cursor: default;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--magenta));
+      transform: scaleX(0);
+      transition: transform 0.4s;
+    }
+
+    .project-card:hover::before { transform: scaleX(1); }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,255,255,0.4);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 30px rgba(0,255,255,0.05);
+    }
+
+    .project-card.hidden { display: none; }
+
+    .project-card.featured {
+      border-color: rgba(123,47,255,0.4);
+    }
+
+    .project-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .project-image-placeholder {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-image-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--dark3), var(--dark2));
+    }
+
+    .project-image-placeholder span { position: relative; z-index: 1; }
+
+    .project-body {
+      padding: 24px;
+    }
+
+    .project-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .project-category {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid;
+    }
+
+    .project-category.ai { color: var(--cyan); border-color: rgba(0,255,255,0.4); background: rgba(0,255,255,0.05); }
+    .project-category.blockchain { color: var(--purple); border-color: rgba(123,47,255,0.4); background: rgba(123,47,255,0.05); }
+    .project-category.fullstack { color: var(--green); border-color: rgba(0,255,65,0.4); background: rgba(0,255,65,0.05); }
+    .project-category.devops { color: var(--orange); border-color: rgba(255,107,0,0.4); background: rgba(255,107,0,0.05); }
+    .project-category.mobile { color: var(--magenta); border-color: rgba(255,0,255,0.4); background: rgba(255,0,255,0.05); }
+
+    .project-status {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .project-status::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+    }
+
+    .project-status.live { color: var(--green); }
+    .project-status.live::before { background: var(--green); animation: blink 1s infinite; }
+    .project-status.wip { color: var(--orange); }
+    .project-status.wip::before { background: var(--orange); }
+    .project-status.completed { color: var(--text-dim); }
+    .project-status.completed::before { background: var(--text-dim); }
+
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .project-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.6rem;
+      letter-spacing: 1px;
+    }
+
+    .project-desc {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 1.2rem;
+    }
+
+    .project-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.58rem;
+      padding: 2px 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      letter-spacing: 1px;
+    }
+
+    .project-links {
+      display: flex;
+      gap: 8px;
+    }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: all 0.3s;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+
+    .project-link.demo {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: var(--dark);
+    }
+
+    .project-link.demo:hover {
+      box-shadow: 0 4px 20px rgba(0,255,255,0.4);
+      transform: translateY(-1px);
+    }
+
+    .project-link.github {
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+    }
+
+    .project-link.github:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .project-link.youtube {
+      border: 1px solid rgba(255,0,0,0.3);
+      color: #ff4444;
+    }
+
+    .project-link.youtube:hover {
+      border-color: #ff0000;
+      background: rgba(255,0,0,0.1);
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      display: none;
+    }
+
+    .empty-state.show { display: block; }
+
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    /* CTA */
+    .projects-cta {
+      text-align: center;
+      padding: 60px 5%;
+      border-top: 1px solid var(--border);
+      background: var(--dark2);
+      position: relative;
+      z-index: 1;
+    }
+
+    .projects-cta h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .projects-cta p { color: var(--text-dim); margin-bottom: 2rem; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      color: var(--dark);
+      border: none;
+      padding: 14px 36px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-decoration: none;
+      clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+      transition: all 0.3s;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,255,255,0.4);
+    }
+
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 30px 5%;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-text {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 600px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .stats-bar { gap: 1.5rem; }
+      .nav-back span { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">B.TALE</a>
+  <a href="/" class="nav-back">← <span>Back to Portfolio</span></a>
+</nav>
+
+<div class="page-header">
+  <span class="page-tag">// WORK — PROJECTS</span>
+  <h1 class="page-title">Things I've Built</h1>
+  <p class="page-desc">A collection of projects spanning AI, blockchain, full-stack, and DevOps engineering.</p>
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat">
+    <div class="stat-n" id="stat-total">0</div>
+    <div class="stat-l">Total Projects</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" id="stat-live">0</div>
+    <div class="stat-l">Live Now</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" id="stat-ai">0</div>
+    <div class="stat-l">AI Projects</div>
+  </div>
+  <div class="stat">
+    <div class="stat-n" id="stat-blockchain">0</div>
+    <div class="stat-l">Blockchain</div>
+  </div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">ALL</button>
+  <button class="filter-btn" data-filter="ai">AI</button>
+  <button class="filter-btn" data-filter="blockchain">BLOCKCHAIN</button>
+  <button class="filter-btn" data-filter="fullstack">FULL-STACK</button>
+  <button class="filter-btn" data-filter="mobile">MOBILE</button>
+  <button class="filter-btn" data-filter="devops">DEVOPS</button>
+</div>
+
+<div class="projects-section">
+  <div class="projects-grid" id="projects-grid"></div>
+  <div class="empty-state" id="empty-state">
+    <div class="empty-state-icon">🔭</div>
+    <h3>NO PROJECTS FOUND</h3>
+    <p style="color:var(--text-dim); font-size:0.9rem;">Nothing in this category yet.</p>
+  </div>
+</div>
+
+<div class="projects-cta">
+  <h3>Let's Build Something Together</h3>
+  <p>Have a project in mind? I'm available for freelance and contract work.</p>
+  <a href="/#contact" class="btn-primary">⚡ Get in Touch</a>
+</div>
+
+<footer>
+  <p class="footer-text">// BHUPENDRA TALE — AI ENGINEER & FULL-STACK DEVELOPER</p>
+</footer>
+
+<script src="projects-data.js"></script>
+<script>
+const categoryIcons = {
+  ai: '🤖', blockchain: '⛓️', fullstack: '⚙️', devops: '☁️', mobile: '📱'
+};
+
+function renderProjects(filter = 'all') {
+  const grid = document.getElementById('projects-grid');
+  const empty = document.getElementById('empty-state');
+  grid.innerHTML = '';
+
+  const filtered = filter === 'all'
+    ? PROJECTS
+    : PROJECTS.filter(p => p.category === filter);
+
+  if (filtered.length === 0) {
+    empty.classList.add('show');
+    return;
+  }
+
+  empty.classList.remove('show');
+
+  filtered.forEach(p => {
+    const card = document.createElement('div');
+    card.className = `project-card${p.featured ? ' featured' : ''}`;
+
+    const imageHTML = p.image
+      ? `<img src="${p.image}" alt="${p.title}" class="project-image" />`
+      : `<div class="project-image-placeholder"><span>${categoryIcons[p.category] || '🔧'}</span></div>`;
+
+    const linksHTML = [
+      p.url ? `<a href="${p.url}" target="_blank" class="project-link demo">▶ LIVE</a>` : '',
+      p.github ? `<a href="${p.github}" target="_blank" class="project-link github">⌥ GITHUB</a>` : '',
+      p.youtube ? `<a href="${p.youtube}" target="_blank" class="project-link youtube">▶ VIDEO</a>` : ''
+    ].filter(Boolean).join('');
+
+    card.innerHTML = `
+      ${imageHTML}
+      <div class="project-body">
+        <div class="project-meta">
+          <span class="project-category ${p.category}">${p.category.toUpperCase()}</span>
+          <span class="project-status ${p.status}">${p.status.toUpperCase()}</span>
+        </div>
+        <div class="project-title">${p.title}</div>
+        <div class="project-desc">${p.description}</div>
+        <div class="project-tags">
+          ${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
+        </div>
+        ${linksHTML ? `<div class="project-links">${linksHTML}</div>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = PROJECTS.length;
+  document.getElementById('stat-live').textContent = PROJECTS.filter(p => p.status === 'live').length;
+  document.getElementById('stat-ai').textContent = PROJECTS.filter(p => p.category === 'ai').length;
+  document.getElementById('stat-blockchain').textContent = PROJECTS.filter(p => p.category === 'blockchain').length;
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProjects(btn.dataset.filter);
+  });
+});
+
+renderProjects();
+updateStats();
+</script>
+</body>
+</html>
