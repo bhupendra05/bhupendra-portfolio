@@ -2,7 +2,14 @@ const express = require('express');
 const router = express.Router();
 const Groq = require('groq-sdk');
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+// Lazy-initialize so missing key doesn't crash server startup
+let groq = null;
+function getGroq() {
+  if (!groq && process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.startsWith('REPLACE')) {
+    groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  }
+  return groq;
+}
 
 const SYSTEM_PROMPT = `You are an AI assistant representing Bhupendra Tale, a cutting-edge AI Engineer, Full-Stack Developer, Blockchain Architect, and DevOps expert. You speak on his behalf to potential clients visiting his portfolio.
 
@@ -31,13 +38,18 @@ router.post('/', async (req, res) => {
   }
 
   try {
+    const client = getGroq();
+    if (!client) {
+      return res.status(503).json({ error: 'AI chat not configured yet. Please contact Bhupendra directly.' });
+    }
+
     const messages = [
       { role: 'system', content: SYSTEM_PROMPT },
-      ...history.slice(-6), // Keep last 6 messages for context
+      ...history.slice(-6),
       { role: 'user', content: message }
     ];
 
-    const completion = await groq.chat.completions.create({
+    const completion = await client.chat.completions.create({
       model: 'llama-3.1-8b-instant',
       messages,
       max_tokens: 300,
