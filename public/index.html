@@ -1582,7 +1582,7 @@ async function sendChat() {
 chatSend.addEventListener('click', sendChat);
 chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
 
-// ===== CONTACT FORM (Web3Forms — client-side direct) =====
+// ===== CONTACT FORM (server-side via Resend) =====
 document.getElementById('contact-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const form = e.target;
@@ -1592,16 +1592,14 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
   btn.disabled = true;
 
   try {
-    const res = await fetch('https://api.web3forms.com/submit', {
+    const res = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        access_key: 'e4da627f-903c-4a72-b661-0af715569864',
         name: form.name.value,
         email: form.email.value,
-        subject: '[Portfolio] ' + (form.subject.value || 'New Contact') + ' — from ' + form.name.value,
-        message: form.message.value,
-        from_name: 'Bhupendra Portfolio'
+        subject: form.subject.value,
+        message: form.message.value
       })
     });
     const data = await res.json();
@@ -1610,7 +1608,7 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
       msgEl.textContent = '✓ Message sent! I\'ll be in touch soon.';
       form.reset();
     } else {
-      throw new Error(data.message || 'Submission failed');
+      throw new Error(data.error || 'Submission failed');
     }
   } catch (err) {
     msgEl.className = 'form-msg error';
