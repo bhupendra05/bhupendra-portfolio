@@ -31,7 +31,7 @@ const PROJECTS = [
     github: "",
     youtube: "",
     featured: true
-  }
+  },
   {
     id: 3,
     title: "POPJOY — CONFETTI BRAND",
