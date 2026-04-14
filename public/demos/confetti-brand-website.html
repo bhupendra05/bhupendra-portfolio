@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>POPJOY — Premium Celebration Confetti & Products</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --violet: #7C3AED;
+      --violet-dark: #5B21B6;
+      --pink: #EC4899;
+      --rose: #FB7185;
+      --gold: #F59E0B;
+      --yellow: #FDE68A;
+      --mint: #34D399;
+      --sky: #38BDF8;
+      --dark: #1E1B4B;
+      --charcoal: #312E81;
+      --white: #FFFFFF;
+      --cream: #FFF9F0;
+      --light: #F5F3FF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ─── CONFETTI CANVAS ─── */
+    #confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,58,237,0.08);
+      transition: all 0.3s;
+    }
+    nav.scrolled {
+      padding: 12px 5%;
+      box-shadow: 0 4px 30px rgba(124,58,237,0.12);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--gold); -webkit-text-fill-color: var(--gold); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .nav-links a:hover { color: var(--violet); }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      color: white !important;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      font-size: 0.88rem !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124,58,237,0.4) !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: 0.3s; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(150deg, #FFF9F0 0%, #F5F3FF 40%, #FDF2F8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 5% 80px;
+    }
+    .hero-bg-shapes { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .hero-bg-shapes .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: float 8s ease-in-out infinite;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--violet); top: -200px; right: -100px; animation-delay: 0s; }
+    .blob-2 { width: 400px; height: 400px; background: var(--pink); bottom: -100px; left: -80px; animation-delay: 3s; }
+    .blob-3 { width: 300px; height: 300px; background: var(--gold); top: 50%; left: 40%; animation-delay: 5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .hero-content {
+      text-align: center;
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124,58,237,0.1);
+      color: var(--violet);
+      border: 1px solid rgba(124,58,237,0.2);
+      padding: 6px 18px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.8s ease both;
+    }
+    .hero-eyebrow .dot { width: 8px; height: 8px; background: var(--pink); border-radius: 50%; animation: pulse-dot 1.5s infinite; }
+    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      color: var(--dark);
+      margin-bottom: 24px;
+      animation: fadeInUp 0.8s 0.1s ease both;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--violet), var(--pink), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-title .underline-text {
+      position: relative;
+      display: inline-block;
+    }
+    .hero-title .underline-text::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--gold), var(--pink));
+      border-radius: 3px;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: #6B7280;
+      line-height: 1.7;
+      max-width: 620px;
+      margin: 0 auto 40px;
+      font-weight: 400;
+      animation: fadeInUp 0.8s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s 0.3s ease both;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      color: white;
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.35);
+      transition: transform 0.25s, box-shadow 0.25s;
+      letter-spacing: 0.3px;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(124,58,237,0.45); }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      color: var(--dark);
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2px solid rgba(124,58,237,0.2);
+      transition: all 0.25s;
+    }
+    .btn-secondary:hover { border-color: var(--violet); background: var(--light); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      margin-top: 64px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s 0.4s ease both;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.82rem; color: #9CA3AF; font-weight: 500; margin-top: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    /* floating confetti shapes in hero */
+    .hero-floating {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .confetti-piece {
+      position: absolute;
+      border-radius: 2px;
+      animation: confettiFloat linear infinite;
+    }
+    @keyframes confettiFloat {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTION COMMONS ─── */
+    section { padding: 100px 5%; }
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--violet);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: #6B7280;
+      line-height: 1.7;
+      max-width: 580px;
+      margin-top: 16px;
+    }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin: 16px auto 0; }
+
+    /* ─── BRANDS / TRUST BAR ─── */
+    .trust-bar {
+      background: var(--dark);
+      padding: 28px 5%;
+      overflow: hidden;
+    }
+    .trust-bar-inner {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      animation: marquee 20s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+    .trust-item .icon { font-size: 1.2rem; }
+
+    /* ─── BRAND STORY ─── */
+    .brand-story {
+      background: var(--cream);
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .story-visual {
+      position: relative;
+    }
+    .story-main-card {
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border-radius: 32px;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      box-shadow: 0 30px 80px rgba(124,58,237,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .story-main-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .story-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: white;
+      border-radius: 20px;
+      padding: 16px 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .story-badge .badge-icon { font-size: 2rem; }
+    .story-badge .badge-text strong { display: block; font-size: 1.1rem; color: var(--dark); }
+    .story-badge .badge-text span { font-size: 0.78rem; color: #9CA3AF; }
+
+    .story-float-tag {
+      position: absolute;
+      top: -10px;
+      left: -20px;
+      background: var(--gold);
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 8px 16px;
+      border-radius: 50px;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.4);
+    }
+
+    .story-content .section-sub { max-width: 100%; }
+    .story-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 2px solid;
+    }
+    .pill-violet { background: rgba(124,58,237,0.08); color: var(--violet); border-color: rgba(124,58,237,0.2); }
+    .pill-pink { background: rgba(236,72,153,0.08); color: var(--pink); border-color: rgba(236,72,153,0.2); }
+    .pill-gold { background: rgba(245,158,11,0.1); color: #B45309; border-color: rgba(245,158,11,0.3); }
+    .pill-mint { background: rgba(52,211,153,0.08); color: #059669; border-color: rgba(52,211,153,0.2); }
+
+    /* ─── PRODUCTS ─── */
+    .products { background: white; }
+    .products-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .product-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: 2px solid #E5E7EB;
+      background: white;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #6B7280;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border-color: transparent;
+      color: white;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .product-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 2px solid #F3F4F6;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(124,58,237,0.15);
+      border-color: rgba(124,58,237,0.2);
+    }
+    .product-img {
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .product-card:hover .product-img::after { opacity: 0.1; }
+
+    .product-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: white;
+      border-radius: 50px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--dark);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .product-badge.new { background: var(--violet); color: white; }
+    .product-badge.sale { background: var(--pink); color: white; }
+    .product-badge.best { background: var(--gold); color: var(--dark); }
+
+    .product-wishlist {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .product-wishlist:hover { transform: scale(1.15); }
+
+    .product-info { padding: 20px 22px 22px; }
+    .product-category { font-size: 0.75rem; color: var(--violet); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+    .product-name { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .product-desc { font-size: 0.85rem; color: #9CA3AF; line-height: 1.5; margin-bottom: 16px; }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .product-price { display: flex; flex-direction: column; }
+    .price-current { font-size: 1.3rem; font-weight: 800; color: var(--dark); }
+    .price-old { font-size: 0.8rem; color: #D1D5DB; text-decoration: line-through; }
+    .product-add-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(124,58,237,0.3);
+    }
+    .product-add-btn:hover { transform: rotate(90deg) scale(1.1); box-shadow: 0 8px 25px rgba(124,58,237,0.45); }
+
+    .product-stars { display: flex; gap: 2px; margin-bottom: 8px; }
+    .star { color: var(--gold); font-size: 0.82rem; }
+
+    /* ─── OCCASIONS ─── */
+    .occasions { background: var(--dark); position: relative; overflow: hidden; }
+    .occasions::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Ccircle cx='40' cy='40' r='2' fill='rgba(255,255,255,0.03)'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .occasions .section-title { color: white; }
+    .occasions .section-eyebrow { color: var(--gold); }
+    .occasions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 60px auto 0;
+    }
+    .occasion-card {
+      border-radius: 24px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .occasion-card:hover { transform: scale(1.02); }
+    .occasion-card.large { grid-column: span 2; }
+    .occasion-card .occ-emoji { font-size: 3rem; margin-bottom: 16px; display: block; }
+    .occasion-card .occ-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: white; margin-bottom: 8px; }
+    .occasion-card .occ-sub { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+    .occasion-card .occ-arrow {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .occasion-card:hover .occ-arrow { background: rgba(255,255,255,0.3); transform: translateX(4px); }
+    .occ-birthday { background: linear-gradient(135deg, #7C3AED, #EC4899); }
+    .occ-wedding { background: linear-gradient(135deg, #1E40AF, #7C3AED); }
+    .occ-party { background: linear-gradient(135deg, #D97706, #EC4899); }
+    .occ-corporate { background: linear-gradient(135deg, #065F46, #0891B2); }
+    .occ-festival { background: linear-gradient(135deg, #9D174D, #B45309); }
+    .occ-baby { background: linear-gradient(135deg, #0E7490, #4338CA); }
+
+    /* ─── HOW IT WORKS ─── */
+    .how-it-works { background: var(--light); }
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      max-width: 1100px;
+      margin: 64px auto 0;
+      position: relative;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--violet), var(--pink));
+      z-index: 0;
+    }
+    .step { text-align: center; position: relative; z-index: 1; }
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 8px 24px rgba(124,58,237,0.3);
+      border: 4px solid white;
+    }
+    .step-num {
+      position: absolute;
+      top: -8px;
+      right: calc(50% - 40px);
+      width: 22px;
+      height: 22px;
+      background: var(--gold);
+      color: var(--dark);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step h4 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .step p { font-size: 0.88rem; color: #6B7280; line-height: 1.6; }
+
+    /* ─── FEATURES ─── */
+    .features { background: white; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 64px auto 0;
+    }
+    .feature-card {
+      display: flex;
+      gap: 20px;
+      padding: 28px 28px;
+      border-radius: 20px;
+      border: 2px solid #F3F4F6;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(124,58,237,0.2);
+      box-shadow: 0 8px 30px rgba(124,58,237,0.08);
+      transform: translateY(-4px);
+    }
+    .feature-icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .fi-violet { background: rgba(124,58,237,0.1); }
+    .fi-pink { background: rgba(236,72,153,0.1); }
+    .fi-gold { background: rgba(245,158,11,0.1); }
+    .fi-mint { background: rgba(52,211,153,0.1); }
+    .fi-sky { background: rgba(56,189,248,0.1); }
+    .fi-rose { background: rgba(251,113,133,0.1); }
+    .fi-purple { background: rgba(91,33,182,0.1); }
+    .fi-orange { background: rgba(249,115,22,0.1); }
+    .feature-text h4 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .feature-text p { font-size: 0.875rem; color: #6B7280; line-height: 1.6; }
+
+    /* ─── GALLERY / INSPIRATION ─── */
+    .gallery { background: var(--cream); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 200px 200px;
+      gap: 16px;
+      max-width: 1200px;
+      margin: 60px auto 0;
+    }
+    .gallery-item {
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .gallery-item:hover { transform: scale(1.03); }
+    .gallery-item.span-2 { grid-column: span 2; }
+    .gallery-item.span-3 { grid-column: span 3; }
+    .gallery-item .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(30,27,75,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .g1 { background: linear-gradient(135deg, #FEE2E2, #FECACA); }
+    .g2 { background: linear-gradient(135deg, #EDE9FE, #DDD6FE); }
+    .g3 { background: linear-gradient(135deg, #FEF9C3, #FDE68A); }
+    .g4 { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); }
+    .g5 { background: linear-gradient(135deg, #DBEAFE, #BFDBFE); }
+    .g6 { background: linear-gradient(135deg, #FCE7F3, #FBCFE8); }
+    .g7 { background: linear-gradient(135deg, #FFF7ED, #FED7AA); }
+    .g8 { background: linear-gradient(135deg, #F5F3FF, #EDE9FE); }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials { background: white; }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1200px;
+      margin: 64px auto 0;
+    }
+    .testimonial-card {
+      background: var(--light);
+      border-radius: 24px;
+      padding: 32px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .testimonial-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(124,58,237,0.12); }
+    .testimonial-card.featured {
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      color: white;
+    }
+    .testimonial-card.featured .testimonial-text { color: rgba(255,255,255,0.9); }
+    .testimonial-card.featured .testimonial-name { color: white; }
+    .testimonial-card.featured .testimonial-role { color: rgba(255,255,255,0.7); }
+    .testimonial-quote { font-size: 3rem; line-height: 1; color: var(--violet); margin-bottom: 16px; opacity: 0.3; }
+    .testimonial-card.featured .testimonial-quote { color: white; opacity: 0.4; }
+    .testimonial-stars { display: flex; gap: 3px; margin-bottom: 14px; }
+    .testimonial-text { font-size: 0.95rem; line-height: 1.7; color: #374151; margin-bottom: 24px; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: white;
+    }
+    .testimonial-card.featured .testimonial-avatar { background: rgba(255,255,255,0.2); }
+    .testimonial-name { font-size: 0.95rem; font-weight: 700; color: var(--dark); }
+    .testimonial-role { font-size: 0.78rem; color: #9CA3AF; }
+
+    /* ─── CTA BANNER ─── */
+    .cta-banner {
+      padding: 80px 5%;
+      background: linear-gradient(135deg, var(--violet) 0%, #9333EA 40%, var(--pink) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='3' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E");
+    }
+    .cta-inner {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+    .cta-inner p { color: rgba(255,255,255,0.8); font-size: 1.05rem; line-height: 1.7; margin-bottom: 40px; }
+    .cta-form {
+      display: flex;
+      gap: 12px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .cta-input {
+      flex: 1;
+      padding: 16px 22px;
+      border-radius: 50px;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.15);
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+      backdrop-filter: blur(10px);
+    }
+    .cta-input::placeholder { color: rgba(255,255,255,0.6); }
+    .cta-input:focus { border-color: rgba(255,255,255,0.7); }
+    .cta-submit {
+      padding: 16px 28px;
+      border-radius: 50px;
+      border: none;
+      background: white;
+      color: var(--violet);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      white-space: nowrap;
+    }
+    .cta-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    .cta-trust { color: rgba(255,255,255,0.6); font-size: 0.8rem; margin-top: 16px; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      padding: 70px 5% 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      max-width: 1200px;
+      margin: 0 auto 56px;
+    }
+    .footer-brand .nav-logo { -webkit-text-fill-color: transparent; display: inline-block; margin-bottom: 16px; font-size: 1.8rem; }
+    .footer-brand p { font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 280px; }
+    .footer-socials { display: flex; gap: 12px; margin-top: 24px; }
+    .social-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .social-btn:hover { background: var(--violet); transform: translateY(-3px); }
+    .footer-col h5 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; letter-spacing: 0.3px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { color: rgba(255,255,255,0.55); text-decoration: none; font-size: 0.87rem; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-bottom p { font-size: 0.82rem; color: rgba(255,255,255,0.4); }
+    .footer-badges { display: flex; gap: 12px; }
+    .footer-badge {
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: rgba(255,255,255,0.06);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ─── FLOATING ACTION ─── */
+    .floating-confetti-btn {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+      z-index: 50;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
+      animation: bounce 3s ease-in-out infinite;
+    }
+    .floating-confetti-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(124,58,237,0.55); animation: none; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 100px;
+      right: 32px;
+      background: var(--dark);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(200px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.show { transform: translateX(0); opacity: 1; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .story-grid { grid-template-columns: 1fr; gap: 48px; }
+      .story-visual { max-width: 420px; margin: 0 auto; }
+      .occasions-grid { grid-template-columns: 1fr 1fr; }
+      .occasion-card.large { grid-column: span 2; }
+      .steps-row { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+      .steps-row::before { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .gallery-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; }
+      .gallery-item.span-3 { grid-column: span 3; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { padding-top: 100px; }
+      .hero-stats { gap: 28px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .occasions-grid { grid-template-columns: 1fr; }
+      .occasion-card.large { grid-column: span 1; }
+      .steps-row { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: auto; }
+      .gallery-item.span-2, .gallery-item.span-3 { grid-column: span 2; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .products-header { flex-direction: column; align-items: flex-start; }
+      .cta-form { flex-direction: column; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      section { padding: 70px 5%; }
+      .steps-row { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item.span-2, .gallery-item.span-3 { grid-column: span 1; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CONFETTI CANVAS -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🎉 Added to cart!</div>
+
+<!-- FLOATING BTN -->
+<button class="floating-confetti-btn" onclick="launchConfetti()" title="Pop Confetti! 🎉">🎉</button>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">POPJOY<span>✦</span></a>
+  <ul class="nav-links">
+    <li><a href="#products">Products</a></li>
+    <li><a href="#occasions">Occasions</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#" class="nav-cta">Shop Now 🛍️</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg-shapes">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="hero-floating" id="heroFloating"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Premium Celebration Products
+    </div>
+    <h1 class="hero-title">
+      Make Every<br/>
+      <span class="gradient-text">Moment</span><br/>
+      <span class="underline-text">Unforgettable</span>
+    </h1>
+    <p class="hero-sub">
+      Handcrafted confetti, vibrant décor, and premium celebration essentials — designed to transform every occasion into a memory worth keeping forever.
+    </p>
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">
+        ✨ Explore Products
+      </a>
+      <a href="#gallery" class="btn-secondary">
+        🎬 See Inspiration
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">50K+</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Products</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4.9★</div>
+        <div class="stat-label">Avg. Rating</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Safe & Non-Toxic</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TRUST BAR ─── -->
+<div class="trust-bar">
+  <div class="trust-bar-inner" id="trustBar">
+    <span class="trust-item"><span class="icon">🌿</span> Eco-Friendly Materials</span>
+    <span class="trust-item"><span class="icon">🔒</span> Safe & Non-Toxic</span>
+    <span class="trust-item"><span class="icon">🚀</span> Fast Shipping Nationwide</span>
+    <span class="trust-item"><span class="icon">🎨</span> Custom Color Options</span>
+    <span class="trust-item"><span class="icon">✅</span> 100% Quality Guarantee</span>
+    <span class="trust-item"><span class="icon">💝</span> Made with Love</span>
+    <span class="trust-item"><span class="icon">🎁</span> Gift Wrapping Available</span>
+    <span class="trust-item"><span class="icon">📞</span> 24/7 Customer Support</span>
+    <!-- duplicate for seamless loop -->
+    <span class="trust-item"><span class="icon">🌿</span> Eco-Friendly Materials</span>
+    <span class="trust-item"><span class="icon">🔒</span> Safe & Non-Toxic</span>
+    <span class="trust-item"><span class="icon">🚀</span> Fast Shipping Nationwide</span>
+    <span class="trust-item"><span class="icon">🎨</span> Custom Color Options</span>
+    <span class="trust-item"><span class="icon">✅</span> 100% Quality Guarantee</span>
+    <span class="trust-item"><span class="icon">💝</span> Made with Love</span>
+    <span class="trust-item"><span class="icon">🎁</span> Gift Wrapping Available</span>
+    <span class="trust-item"><span class="icon">📞</span> 24/7 Customer Support</span>
+  </div>
+</div>
+
+<!-- ─── BRAND STORY ─── -->
+<section class="brand-story" id="about">
+  <div class="story-grid">
+    <div class="story-visual reveal">
+      <div class="story-float-tag">✨ Est. 2018</div>
+      <div class="story-main-card">🎊</div>
+      <div class="story-badge">
+        <span class="badge-icon">🏆</span>
+        <div class="badge-text">
+          <strong>Best Brand 2024</strong>
+          <span>Celebration Industry Awards</span>
+        </div>
+      </div>
+    </div>
+    <div class="story-content">
+      <span class="section-eyebrow">Our Story</span>
+      <h2 class="section-title">Born from the Joy<br/>of Celebration</h2>
+      <p class="section-sub">
+        We believe every celebration deserves a magical touch. POPJOY was built on a simple idea: premium confetti and celebration products shouldn't just look beautiful — they should <em>feel</em> like joy in your hands.
+      </p>
+      <p class="section-sub" style="margin-top:14px">
+        From intimate birthdays to grand weddings, our products are crafted with care, love, and an obsession for detail — ensuring your moments are as vibrant as the life you're celebrating.
+      </p>
+      <div class="story-pills">
+        <span class="pill pill-violet">🌿 Eco-Conscious</span>
+        <span class="pill pill-pink">🎨 Vibrant Colors</span>
+        <span class="pill pill-gold">⭐ Premium Quality</span>
+        <span class="pill pill-mint">✅ Non-Toxic Safe</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRODUCTS ─── -->
+<section class="products" id="products">
+  <div class="products-header">
+    <div>
+      <span class="section-eyebrow">Our Collection</span>
+      <h2 class="section-title">Find Your Perfect<br/>Celebration Piece</h2>
+    </div>
+    <div class="product-filters">
+      <button class="filter-btn active" onclick="filterProducts(this, 'all')">All</button>
+      <button class="filter-btn" onclick="filterProducts(this, 'confetti')">Confetti</button>
+      <button class="filter-btn" onclick="filterProducts(this, 'poppers')">Poppers</button>
+      <button class="filter-btn" onclick="filterProducts(this, 'balloons')">Balloons</button>
+      <button class="filter-btn" onclick="filterProducts(this, 'kits')">Party Kits</button>
+    </div>
+  </div>
+  <div class="products-grid" id="productsGrid">
+    <!-- Card 1 -->
+    <div class="product-card reveal" data-cat="confetti">
+      <div class="product-img" style="background: linear-gradient(135deg, #FEE2E2, #FCA5A5);">
+        🎊
+        <span class="product-badge best">Best Seller</span>
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Confetti</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(348)</span>
+        </div>
+        <div class="product-name">Rainbow Burst Confetti Mix</div>
+        <div class="product-desc">20+ vibrant colors, tissue-paper soft, biodegradable &amp; eco-friendly.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹499</span>
+            <span class="price-old">₹799</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="product-card reveal reveal-delay-1" data-cat="poppers">
+      <div class="product-img" style="background: linear-gradient(135deg, #EDE9FE, #C4B5FD);">
+        🎉
+        <span class="product-badge new">New</span>
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Poppers</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(214)</span>
+        </div>
+        <div class="product-name">Luxe Gold Confetti Cannon</div>
+        <div class="product-desc">Premium metallic confetti in a reusable cannon — maximum drama, minimum mess.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹349</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="product-card reveal reveal-delay-2" data-cat="balloons">
+      <div class="product-img" style="background: linear-gradient(135deg, #FEF9C3, #FDE047);">
+        🎈
+        <span class="product-badge sale">Sale</span>
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Balloons</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star" style="color:#D1D5DB">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(189)</span>
+        </div>
+        <div class="product-name">Pastel Dream Balloon Bouquet</div>
+        <div class="product-desc">12-piece pastel balloon set with satin ribbons — perfect table centrepiece.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹599</span>
+            <span class="price-old">₹899</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card 4 -->
+    <div class="product-card reveal" data-cat="kits">
+      <div class="product-img" style="background: linear-gradient(135deg, #D1FAE5, #6EE7B7);">
+        🎁
+        <span class="product-badge new">New</span>
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Party Kits</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(97)</span>
+        </div>
+        <div class="product-name">Complete Celebration Kit</div>
+        <div class="product-desc">Everything you need — confetti, banners, streamers, poppers &amp; more in one box.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹1,299</span>
+            <span class="price-old">₹1,899</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card 5 -->
+    <div class="product-card reveal reveal-delay-1" data-cat="confetti">
+      <div class="product-img" style="background: linear-gradient(135deg, #DBEAFE, #93C5FD);">
+        ✨
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Confetti</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(276)</span>
+        </div>
+        <div class="product-name">Silver Metallic Foil Stars</div>
+        <div class="product-desc">Shimmering foil star confetti — catches every light for that magical sparkle.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹299</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+    <!-- Card 6 -->
+    <div class="product-card reveal reveal-delay-2" data-cat="poppers">
+      <div class="product-img" style="background: linear-gradient(135deg, #FCE7F3, #F9A8D4);">
+        🥳
+        <span class="product-badge best">Popular</span>
+        <span class="product-wishlist">🤍</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">Poppers</div>
+        <div class="product-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          <span style="font-size:0.78rem;color:#9CA3AF;margin-left:4px">(432)</span>
+        </div>
+        <div class="product-name">Rose Gold Party Popper Set</div>
+        <div class="product-desc">Pack of 6 rose-gold metallic poppers — dramatic reveal moments guaranteed.</div>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-current">₹449</span>
+            <span class="price-old">₹649</span>
+          </div>
+          <button class="product-add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── OCCASIONS ─── -->
+<section class="occasions" id="occasions">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="text-align:center">
+      <span class="section-eyebrow">Every Celebration Covered</span>
+      <h2 class="section-title">Shop by Occasion</h2>
+      <p style="color:rgba(255,255,255,0.6);font-size:1.05rem;margin-top:16px;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7">
+        Whatever you're celebrating, we have the perfect products to make it extraordinary.
+      </p>
+    </div>
+    <div class="occasions-grid">
+      <div class="occasion-card occ-birthday large reveal">
+        <span class="occ-emoji">🎂</span>
+        <div class="occ-title">Birthdays</div>
+        <div class="occ-sub">From first birthdays to milestone anniversaries — make the cake cutting a spectacular confetti moment.</div>
+        <span class="occ-arrow">→</span>
+      </div>
+      <div class="occasion-card occ-wedding reveal reveal-delay-1">
+        <span class="occ-emoji">💍</span>
+        <div class="occ-title">Weddings</div>
+        <div class="occ-sub">Create a dreamy aisle exit and reception that guests will talk about for years.</div>
+        <span class="occ-arrow">→</span>
+      </div>
+      <div class="occasion-card occ-party reveal">
+        <span class="occ-emoji">🥳</span>
+        <div class="occ-title">Parties</div>
+        <div class="occ-sub">DJ nights, house parties, and every reason to celebrate in between.</div>
+        <span class="occ-arrow">→</span>
+      </div>
+      <div class="occasion-card occ-corporate reveal reveal-delay-1">
+        <span class="occ-emoji">🏢</span>
+        <div class="occ-title">Corporate Events</div>
+        <div class="occ-sub">Product launches, award ceremonies, and team milestones worth celebrating in style.</div>
+        <span class="occ-arrow">→</span>
+      </div>
+      <div class="occasion-card occ-festival reveal reveal-delay-2">
+        <span class="occ-emoji">🪔</span>
+        <div class="occ-title">Festivals</div>
+        <div class="occ-sub">Diwali, Holi, Christmas, Eid — add colour and excitement to every festive celebration.</div>
+        <span class="occ-arrow">→</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section class="how-it-works">
+  <div style="text-align:center">
+    <span class="section-eyebrow">Simple & Delightful</span>
+    <h2 class="section-title">Get Celebrating in 4 Easy Steps</h2>
+    <p class="section-sub" style="margin:16px auto 0">We make it effortless — from browsing to your big moment.</p>
+  </div>
+  <div class="steps-row">
+    <div class="step reveal">
+      <div class="step-icon">🔍<span class="step-num">1</span></div>
+      <h4>Browse & Choose</h4>
+      <p>Explore our curated collection of 200+ premium celebration products across all categories.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-icon">🎨<span class="step-num">2</span></div>
+      <h4>Customize Colors</h4>
+      <p>Pick from our vibrant color palettes or request custom colors that match your event theme.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-icon">📦<span class="step-num">3</span></div>
+      <h4>Quick Delivery</h4>
+      <p>Fast nationwide shipping — receive your premium celebration products safely at your door.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-icon">🎉<span class="step-num">4</span></div>
+      <h4>Celebrate in Style</h4>
+      <p>Pop, throw, decorate — and create memories that last a lifetime. Don't forget to share!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURES ─── -->
+<section class="features">
+  <div style="text-align:center;max-width:600px;margin:0 auto">
+    <span class="section-eyebrow">Why POPJOY</span>
+    <h2 class="section-title">The POPJOY Difference</h2>
+    <p class="section-sub">We're not just selling confetti. We're delivering joy — with every single product.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon-box fi-violet">🌿</div>
+      <div class="feature-text">
+        <h4>Eco-Friendly &amp; Biodegradable</h4>
+        <p>All our confetti and paper products are made from certified compostable materials — celebrate without guilt.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon-box fi-pink">🔬</div>
+      <div class="feature-text">
+        <h4>Dermatologist Tested &amp; Safe</h4>
+        <p>Every product is non-toxic, skin-safe, and child-friendly — certified and tested for peace of mind.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon-box fi-gold">🎨</div>
+      <div class="feature-text">
+        <h4>Custom Color Matching</h4>
+        <p>Have a specific Pantone color in mind? We do custom orders to perfectly match your event's color palette.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon-box fi-mint">📦</div>
+      <div class="feature-text">
+        <h4>Premium Packaging</h4>
+        <p>Every order arrives in elegant, gift-ready packaging — because unboxing should also feel like a celebration.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon-box fi-sky">⚡</div>
+      <div class="feature-text">
+        <h4>Express &amp; Same-Day Delivery</h4>
+        <p>Forgot to order in advance? Our express options ensure you never miss the magic moment.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon-box fi-rose">💬</div>
+      <div class="feature-text">
+        <h4>Dedicated Event Consultants</h4>
+        <p>Our team of celebration experts will help you choose and coordinate the perfect product mix for your event.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon-box fi-purple">🏷️</div>
+      <div class="feature-text">
+        <h4>Wholesale &amp; Bulk Pricing</h4>
+        <p>Planning a large event or a business? Get exclusive bulk rates with consistent quality and dedicated support.</p>
+      </div>
+    </div>
+    <div class="feature-card reveal reveal-delay-3">
+      <div class="feature-icon-box fi-orange">🔄</div>
+      <div class="feature-text">
+        <h4>Easy Returns &amp; Guarantee</h4>
+        <p>Not satisfied? We offer a 100% satisfaction guarantee and a fuss-free 30-day return policy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GALLERY ─── -->
+<section class="gallery" id="gallery">
+  <div style="text-align:center">
+    <span class="section-eyebrow">Real Celebrations</span>
+    <h2 class="section-title">Moments Made with POPJOY</h2>
+    <p class="section-sub" style="margin:16px auto 0">Real customers, real celebrations — every photo tells a story of joy.</p>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item span-2 g1 reveal">
+      🎂
+      <div class="gallery-overlay">🎂 Birthday Bash · Mumbai</div>
+    </div>
+    <div class="gallery-item g2 reveal reveal-delay-1">
+      💍
+      <div class="gallery-overlay">💍 Wedding Day</div>
+    </div>
+    <div class="gallery-item g3 reveal reveal-delay-2">
+      🥳
+      <div class="gallery-overlay">🥳 New Year Party</div>
+    </div>
+    <div class="gallery-item g4 reveal">
+      🎉
+      <div class="gallery-overlay">🎉 Corporate Launch</div>
+    </div>
+    <div class="gallery-item span-3 g5 reveal reveal-delay-1">
+      🎊
+      <div class="gallery-overlay">🎊 Grand Reception · Delhi</div>
+    </div>
+    <div class="gallery-item g6 reveal reveal-delay-2">
+      🪔
+      <div class="gallery-overlay">🪔 Diwali Celebration</div>
+    </div>
+    <div class="gallery-item g7 reveal reveal-delay-3">
+      👶
+      <div class="gallery-overlay">👶 Baby Shower</div>
+    </div>
+    <div class="gallery-item g8 reveal">
+      🎓
+      <div class="gallery-overlay">🎓 Graduation Party</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="testimonials">
+  <div style="text-align:center">
+    <span class="section-eyebrow">Customer Love</span>
+    <h2 class="section-title">50,000+ Happy Celebrations</h2>
+    <p class="section-sub" style="margin:16px auto 0">Don't just take our word for it — here's what our customers say.</p>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-text">The confetti burst at our daughter's first birthday was pure magic. Every single guest was stunned. The colors were SO vibrant — exactly as shown. Will never use another brand!</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👩</div>
+        <div>
+          <div class="testimonial-name">Priya Sharma</div>
+          <div class="testimonial-role">Mom · Mumbai</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card featured reveal reveal-delay-1">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <span style="color:#FDE68A;font-size:0.82rem;">★</span><span style="color:#FDE68A;font-size:0.82rem;">★</span><span style="color:#FDE68A;font-size:0.82rem;">★</span><span style="color:#FDE68A;font-size:0.82rem;">★</span><span style="color:#FDE68A;font-size:0.82rem;">★</span>
+      </div>
+      <p class="testimonial-text">We used POPJOY confetti cannons for our wedding exit and the photos are absolutely breathtaking. Our photographer said it was the best confetti she's ever shot with. Worth every rupee!</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👰</div>
+        <div>
+          <div class="testimonial-name">Anika &amp; Rohit Mehta</div>
+          <div class="testimonial-role">Newlyweds · Pune</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <div class="testimonial-quote">"</div>
+      <div class="testimonial-stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <p class="testimonial-text">Ordered the complete party kit for our product launch event. Everything arrived beautifully packaged, on time, and the quality was premium-level. The POPJOY team even helped us choose the right color scheme!</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">👨‍💼</div>
+        <div>
+          <div class="testimonial-name">Karthik Nair</div>
+          <div class="testimonial-role">Event Manager · Bangalore</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA BANNER ─── -->
+<section class="cta-banner">
+  <div class="cta-inner">
+    <h2>🎉 Get 20% Off Your First Order</h2>
+    <p>Subscribe to our newsletter and be the first to know about new products, flash sales, and exclusive celebration ideas delivered to your inbox.</p>
+    <div class="cta-form">
+      <input type="email" class="cta-input" placeholder="Enter your email address"/>
+      <button class="cta-submit" onclick="subscribeNewsletter()">Subscribe ✨</button>
+    </div>
+    <p class="cta-trust">🔒 No spam, ever. Unsubscribe anytime. Your data is safe with us.</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="font-size:1.8rem">POPJOY<span>✦</span></a>
+      <p>Turning ordinary moments into extraordinary celebrations with premium confetti and celebration products — crafted with love, delivered with joy.</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="#">📸</a>
+        <a class="social-btn" href="#">📘</a>
+        <a class="social-btn" href="#">▶️</a>
+        <a class="social-btn" href="#">🐦</a>
+        <a class="social-btn" href="#">📌</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <ul class="footer-links">
+        <li><a href="#">Confetti</a></li>
+        <li><a href="#">Party Poppers</a></li>
+        <li><a href="#">Balloon Sets</a></li>
+        <li><a href="#">Streamers</a></li>
+        <li><a href="#">Party Kits</a></li>
+        <li><a href="#">Custom Orders</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Occasions</h5>
+      <ul class="footer-links">
+        <li><a href="#">Birthdays</a></li>
+        <li><a href="#">Weddings</a></li>
+        <li><a href="#">Baby Showers</a></li>
+        <li><a href="#">Corporate Events</a></li>
+        <li><a href="#">Festivals</a></li>
+        <li><a href="#">Graduations</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Support</h5>
+      <ul class="footer-links">
+        <li><a href="#">Track My Order</a></li>
+        <li><a href="#">Returns &amp; Refunds</a></li>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Wholesale</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 POPJOY Celebration Co. · All rights reserved · Made with 🎉 in India</p>
+    <div class="footer-badges">
+      <span class="footer-badge">🌿 Eco Certified</span>
+      <span class="footer-badge">🔒 SSL Secure</span>
+      <span class="footer-badge">✅ ISO Certified</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── NAVBAR SCROLL ───
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 60) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  });
+
+  // ─── HAMBURGER ───
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '70px';
+    links.style.left = '0'; links.style.right = '0';
+    links.style.background = 'white';
+    links.style.padding = '20px 5%';
+    links.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+  }
+
+  // ─── HERO FLOATING CONFETTI ───
+  const colors = ['#7C3AED','#EC4899','#F59E0B','#34D399','#38BDF8','#FB7185','#A78BFA'];
+  const shapes = ['circle','rect','triangle'];
+
+  function createFloatingPiece() {
+    const container = document.getElementById('heroFloating');
+    const el = document.createElement('div');
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const size = 6 + Math.random() * 10;
+    const left = Math.random() * 100;
+    const duration = 6 + Math.random() * 6;
+    const delay = Math.random() * 4;
+    el.style.cssText = `
+      position:absolute;
+      left:${left}%;
+      top:-20px;
+      width:${size}px;
+      height:${size}px;
+      background:${color};
+      border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
+      opacity:${0.4 + Math.random() * 0.4};
+      animation:confettiFloat ${duration}s ${delay}s linear infinite;
+    `;
+    container.appendChild(el);
+    setTimeout(() => el.remove(), (duration + delay) * 1000 * 3);
+  }
+
+  for (let i = 0; i < 30; i++) {
+    setTimeout(createFloatingPiece, i * 200);
+  }
+  setInterval(createFloatingPiece, 400);
+
+  // ─── CONFETTI EXPLOSION ───
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animating = false;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function Particle(x, y) {
+    this.x = x;
+    this.y = y;
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+    this.r = 4 + Math.random() * 6;
+    this.vx = (Math.random() - 0.5) * 14;
+    this.vy = -8 - Math.random() * 10;
+    this.gravity = 0.3;
+    this.drag = 0.97;
+    this.alpha = 1;
+    this.shape = Math.random() > 0.5 ? 'rect' : 'circle';
+    this.rotation = Math.random() * 360;
+    this.rotationSpeed = (Math.random() - 0.5) * 8;
+  }
+
+  Particle.prototype.update = function() {
+    this.vy += this.gravity;
+    this.vx *= this.drag;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 0.012;
+    this.rotation += this.rotationSpeed;
+  };
+
+  Particle.prototype.draw = function() {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.fillStyle = this.color;
+    ctx.translate(this.x, this.y);
+    ctx.rotate((this.rotation * Math.PI) / 180);
+    if (this.shape === 'rect') {
+      ctx.fillRect(-this.r, -this.r / 2, this.r * 2, this.r);
+    } else {
+      ctx.beginPath();
+      ctx.arc(0, 0, this.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  };
+
+  function launchConfetti() {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    for (let i = 0; i < 150; i++) {
+      particles.push(new Particle(cx + (Math.random() - 0.5) * 200, cy + (Math.random() - 0.5) * 100));
+    }
+    // also launch from corners
+    [[0,0],[window.innerWidth,0],[0,window.innerHeight],[window.innerWidth,window.innerHeight]].forEach(([x,y]) => {
+      for (let i = 0; i < 40; i++) particles.push(new Particle(x, y));
+    });
+    canvas.style.opacity = '1';
+    if (!animating) {
+      animating = true;
+      animateConfetti();
+    }
+  }
+
+  function animateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles = particles.filter(p => p.alpha > 0 && p.y < canvas.height + 50);
+    particles.forEach(p => { p.update(); p.draw(); });
+    if (particles.length > 0) {
+      requestAnimationFrame(animateConfetti);
+    } else {
+      animating = false;
+      canvas.style.opacity = '0';
+    }
+  }
+
+  // ─── ADD TO CART ───
+  function addToCart(btn) {
+    btn.textContent = '✓';
+    btn.style.background = 'linear-gradient(135deg, #34D399, #059669)';
+    setTimeout(() => {
+      btn.textContent = '+';
+      btn.style.background = 'linear-gradient(135deg, #7C3AED, #EC4899)';
+    }, 1500);
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2800);
+    launchMiniConfetti();
+  }
+
+  function launchMiniConfetti() {
+    for (let i = 0; i < 40; i++) {
+      particles.push(new Particle(window.innerWidth - 100, window.innerHeight - 120));
+    }
+    canvas.style.opacity = '1';
+    if (!animating) { animating = true; animateConfetti(); }
+  }
+
+  // ─── NEWSLETTER SUBSCRIBE ───
+  function subscribeNewsletter() {
+    const input = document.querySelector('.cta-input');
+    if (input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = '🎉 You\'re subscribed! Check your inbox.';
+      launchConfetti();
+    } else {
+      input.placeholder = 'Please enter a valid email';
+      input.style.borderColor = '#FB7185';
+      setTimeout(() => {
+        input.placeholder = 'Enter your email address';
+        input.style.borderColor = '';
+      }, 2000);
+    }
+  }
+
+  // ─── PRODUCT FILTERS ───
+  function filterProducts(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.product-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.style.display = '';
+        card.style.animation = 'fadeInUp 0.4s ease both';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // ─── SCROLL REVEAL ───
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // ─── WISHLIST TOGGLE ───
+  document.querySelectorAll('.product-wishlist').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.textContent = this.textContent === '🤍' ? '❤️' : '🤍';
+    });
+  });
+
+  // ─── SMOOTH CTA INPUT ENTER ───
+  document.querySelector('.cta-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') subscribeNewsletter();
+  });
+
+  // ─── AUTO-CONFETTI ON LOAD ───
+  window.addEventListener('load', () => {
+    setTimeout(launchConfetti, 1200);
+  });
+</script>
+</body>
+</html>

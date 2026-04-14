@@ -467,6 +467,73 @@
       .stats-bar { gap: 1.5rem; }
       .nav-back span { display: none; }
     }
+
+    /* DEMO MODAL */
+    .demo-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0,0,0,0.92);
+      flex-direction: column;
+    }
+    .demo-modal.open { display: flex; }
+    .demo-modal-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: #0a0a12;
+      border-bottom: 1px solid var(--cyan);
+      flex-shrink: 0;
+    }
+    .demo-modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 2px;
+    }
+    .demo-modal-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      background: rgba(0,255,255,0.05);
+      border: 1px solid rgba(0,255,255,0.15);
+      padding: 3px 10px;
+      letter-spacing: 1px;
+    }
+    .demo-modal-actions { display: flex; gap: 10px; align-items: center; }
+    .demo-modal-close {
+      background: none;
+      border: 1px solid rgba(255,0,0,0.4);
+      color: #ff4444;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      padding: 5px 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.2s;
+    }
+    .demo-modal-close:hover { background: rgba(255,0,0,0.15); border-color: #ff4444; }
+    .demo-modal-fullscreen {
+      background: none;
+      border: 1px solid rgba(0,255,255,0.3);
+      color: var(--cyan);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      padding: 5px 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .demo-modal-fullscreen:hover { background: rgba(0,255,255,0.1); }
+    .demo-modal iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
@@ -560,6 +627,7 @@ function renderProjects(filter = 'all') {
       : `<div class="project-image-placeholder"><span>${categoryIcons[p.category] || '🔧'}</span></div>`;
 
     const linksHTML = [
+      p.demo ? `<button onclick="openDemo('${p.demo}','${p.title}')" class="project-link demo">⬡ VIEW DEMO</button>` : '',
       p.url ? `<a href="${p.url}" target="_blank" class="project-link demo">▶ LIVE</a>` : '',
       p.github ? `<a href="${p.github}" target="_blank" class="project-link github">⌥ GITHUB</a>` : '',
       p.youtube ? `<a href="${p.youtube}" target="_blank" class="project-link youtube">▶ VIDEO</a>` : ''
@@ -601,6 +669,39 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 renderProjects();
 updateStats();
+
+// ===== DEMO MODAL =====
+function openDemo(url, title) {
+  const modal = document.getElementById('demo-modal');
+  document.getElementById('demo-modal-title').textContent = title + ' — DEMO';
+  document.getElementById('demo-iframe').src = url;
+  document.getElementById('demo-fullscreen-link').href = url;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDemo() {
+  const modal = document.getElementById('demo-modal');
+  modal.classList.remove('open');
+  document.getElementById('demo-iframe').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemo(); });
 </script>
+
+<!-- DEMO MODAL -->
+<div class="demo-modal" id="demo-modal">
+  <div class="demo-modal-bar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="demo-modal-title" id="demo-modal-title">DEMO</span>
+      <span class="demo-modal-tag">DEMO PREVIEW</span>
+    </div>
+    <div class="demo-modal-actions">
+      <a class="demo-modal-fullscreen" id="demo-fullscreen-link" href="#" target="_blank">⤢ FULL SCREEN</a>
+      <button class="demo-modal-close" onclick="closeDemo()">✕ CLOSE</button>
+    </div>
+  </div>
+  <iframe id="demo-iframe" src="" title="Demo Preview" allow="fullscreen"></iframe>
+</div>
+
 </body>
 </html>

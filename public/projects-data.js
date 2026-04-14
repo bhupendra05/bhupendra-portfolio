@@ -32,6 +32,20 @@ const PROJECTS = [
     youtube: "",
     featured: true
   }
+  {
+    id: 3,
+    title: "POPJOY — CONFETTI BRAND",
+    description: "Premium celebration confetti & products brand website. Full e-commerce landing page with animated hero, product showcase, trust bar, and conversion-optimized design.",
+    category: "fullstack",
+    tags: ["Brand Design", "E-Commerce", "UI/UX", "HTML/CSS", "Client Work"],
+    status: "completed",
+    image: "",
+    demo: "/demos/confetti-brand-website.html",
+    url: "",
+    github: "",
+    youtube: "",
+    featured: true
+  },
   // =============================================
   // ADD YOUR PROJECTS BELOW THIS LINE:
   // {
